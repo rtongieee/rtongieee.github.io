@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Essay Submission Interface</title>
+    <style>
+        #rubrics {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+        }
+        button {
+            margin-top: 10px;
+        }
+
+        #loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Submit Your English Writing and Get Score and Feedback</h1>
+
+<form id="submissionForm">
+    <textarea id="studentInput" placeholder="Write your paragraph here..." rows="4" cols="50"></textarea><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<div id="rubrics">
+        <h2>Essay Rubrics</h2>
+        <p>[Here you would insert the rubric content or provide a link to the rubric document for the students to review.]</p>
+</div>
+
+<div id="loading">Waiting for result...</div>
+
+<h2>Score and Feedback:</h2>
+<label for="rubricScore">Rubric Score:</label>
+<input type="text" id="rubricScore" readonly><br><br>
+
+<label for="scoreRationale">Score Rationale:</label>
+<textarea id="scoreRationale" rows="4" cols="50" readonly></textarea><br>
+
+<button id="resubmit">Resubmit</button>
+
+<script>
+    const submissionForm = document.getElementById("submissionForm");
+    const studentInput = document.getElementById("studentInput");
+    const rubricScore = document.getElementById("rubricScore");
+    const scoreRationale = document.getElementById("scoreRationale");
+    const loading = document.getElementById("loading");
+    const resubmitBtn = document.getElementById("resubmit");
+
+    submissionForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        loading.style.display = "block";
+
+        const studentResponse = studentInput.value;
+        const requestBody = JSON.stringify({
+            "student_response": studentResponse
+        });
+        const submissionData = {
+                "Student_work": {
+                    "Student_Task_Prompt": "Complete a Quick Write analyzing the development of the paradox of dystopias as a theme in 'The Perfect Match' by Ken Liu.",
+                    "student_submitted_writing": studentInput
+                },
+                // Including other necessary data such as Rubrics, TypicalThemes, etc.
+                // ... 
+            };
+
+        const response = await fetch('https://eo7dl3qiufiihdy.m.pipedream.net', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: requestBody
+        });
+
+        const scorebot_response = await response.json();
+        rubricScore.value = scorebot_response.rubric_score;
+        scoreRationale.value = scorebot_response.score_rationale;
+
+        loading.style.display = "none";
+    });
+</script>
+<script type="text/javascript">
+  (function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '6592c71f89e9856d2ef97bca' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production'
+        });
+      }
+      v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+</script>
+</body>
+</html>
