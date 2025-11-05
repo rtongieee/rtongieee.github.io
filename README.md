@@ -1,2 +1,2 @@
 # rtongieee.github.io
-Demo Pages 
+Personal Page for Richard Tong
